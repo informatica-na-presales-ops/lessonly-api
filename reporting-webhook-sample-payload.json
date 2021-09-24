@@ -1,0 +1,22 @@
+{
+  "user": {
+    "ext_uid": "1234567890",
+    "id": "1",
+    "name": "Sample Person",
+    "email": "sample@company.co",
+    "custom_fields": {
+      "Custom Field Name": "Custom Field Value"
+    }
+  },
+  "lesson": {
+    "id": "1000",
+    "title": "A Sample Lesson",
+    "retake_score": 85
+  },
+  "score": 1,
+  "score_percent": 100.0,
+  "started_at": "2015-04-28T14:36:22Z",
+  "completed_at": "2015-04-28T14:36:24Z",
+  "assigned_at": "2015-04-28T14:36:18Z",
+  "report_card_url": "https://sample.lessonly.com/assignments/100"
+}
