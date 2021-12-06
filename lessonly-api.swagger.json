@@ -154,6 +154,39 @@
         "ext_uid": {
           "type": "string"
         },
+        "groups": {
+          "type": "object",
+          "properties": {
+            "member": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "manager": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
         "hire_date": {
           "type": "string"
         },
