@@ -486,7 +486,7 @@
                   }
                 }
               },
-              "pubic": {
+              "public": {
                 "type": "boolean"
               },
               "published_at": {
