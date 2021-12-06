@@ -295,6 +295,29 @@
         }
       }
     },
+    "assignmentsGet##assignments##contents": {
+      "type": "object",
+      "properties": {
+        "completed_at": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "resource_type": {
+          "type": "string"
+        },
+        "score": {
+          "type": "integer"
+        },
+        "started_at": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    },
     "assignmentsGet##assignments": {
       "type": "object",
       "required": [
@@ -317,6 +340,12 @@
         "completed_at": {
           "type": "string"
         },
+        "contents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/assignmentsGet##assignments##contents"
+          }
+        },
         "due_by": {
           "type": "string"
         },
@@ -325,6 +354,9 @@
         },
         "id": {
           "type": "integer"
+        },
+        "is_certification": {
+          "type": "boolean"
         },
         "reassigned_at": {
           "type": "string"
