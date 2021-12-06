@@ -70,6 +70,22 @@
         }
       }
     },
+    "/v1.1/paths": {
+      "get": {
+        "operationId": "pathsGet",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/pathsGet"
+            }
+          }
+        }
+      }
+    },
     "/v1.1/users": {
       "get": {
         "operationId": "usersGet",
@@ -426,6 +442,83 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/lessonsGet##lessons"
+          }
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "pathsGet": {
+      "type": "object",
+      "properties": {
+        "paths": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "archived_at": {
+                "type": "string"
+              },
+              "archived_by_user_id": {
+                "type": "string"
+              },
+              "created_at": {
+                "type": "string"
+              },
+              "id": {
+                "type": "integer"
+              },
+              "is_certification": {
+                "type": "boolean"
+              },
+              "last_updated_at": {
+                "type": "string"
+              },
+              "links": {
+                "type": "object",
+                "properties": {
+                  "overview": {
+                    "type": "string"
+                  },
+                  "shareable": {
+                    "type": "string"
+                  }
+                }
+              },
+              "pubic": {
+                "type": "boolean"
+              },
+              "published_at": {
+                "type": "string"
+              },
+              "publisher_id": {
+                "type": "integer"
+              },
+              "resource_type": {
+                "type": "string"
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "resource_type": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "title": {
+                "type": "string"
+              }
+            }
           }
         },
         "type": {
