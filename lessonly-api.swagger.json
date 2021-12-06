@@ -1,0 +1,260 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "2021.1",
+    "title": "Lessonly API"
+  },
+  "schemes": [
+    "https"
+  ],
+  "host": "api.lessonly.com",
+  "basePath": "/api",
+  "paths": {
+    "/v1.1/assignments": {
+      "get": {
+        "operationId": "assignmentsGet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/assignmentsGet"
+            }
+          }
+        }
+      }
+    },
+    "/v1.1/users": {
+      "get": {
+        "operationId": "usersGet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/usersGet"
+            }
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "basicAuth": {
+      "type": "basic"
+    }
+  },
+  "security": [
+    {
+      "basicAuth": []
+    }
+  ],
+  "definitions": {
+    "usersGet##users##custom_user_field_data": {
+      "type": "object",
+      "properties": {
+        "custom_user_field_id": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "usersGet##users": {
+      "type": "object",
+      "properties": {
+        "archived_at": {
+          "type": "string"
+        },
+        "archived_by_user_id": {
+          "type": "integer"
+        },
+        "business_unit": {
+          "type": "string"
+        },
+        "custom_user_field_data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/usersGet##users##custom_user_field_data"
+          }
+        },
+        "department": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "ext_uid": {
+          "type": "string"
+        },
+        "hire_date": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "job_title": {
+          "type": "string"
+        },
+        "locale": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "manager_name": {
+          "type": "string"
+        },
+        "mobile_phone_number": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "resource_type": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "role_id": {
+          "type": "integer"
+        }
+      }
+    },
+    "usersGet": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "integer"
+        },
+        "per_page": {
+          "type": "integer"
+        },
+        "total_pages": {
+          "type": "integer"
+        },
+        "total_users": {
+          "type": "integer"
+        },
+        "type": {
+          "type": "string"
+        },
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/usersGet##users"
+          }
+        }
+      }
+    },
+    "assignmentsGet##assignments": {
+      "type": "object",
+      "properties": {
+        "assignable_id": {
+          "type": "integer"
+        },
+        "assignable_type": {
+          "type": "string"
+        },
+        "assigned_at": {
+          "type": "string"
+        },
+        "assignee_id": {
+          "type": "integer"
+        },
+        "completed_at": {
+          "type": "string"
+        },
+        "due_by": {
+          "type": "string"
+        },
+        "ext_uid": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "reassigned_at": {
+          "type": "string"
+        },
+        "resource_type": {
+          "type": "string"
+        },
+        "score": {
+          "type": "integer"
+        },
+        "started_at": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        }
+      }
+    },
+    "assignmentsGet": {
+      "type": "object",
+      "properties": {
+        "assignments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/assignmentsGet##assignments"
+          }
+        },
+        "page": {
+          "type": "integer"
+        },
+        "per_page": {
+          "type": "integer"
+        },
+        "total_assignments": {
+          "type": "integer"
+        },
+        "total_pages": {
+          "type": "integer"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
