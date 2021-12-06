@@ -38,6 +38,23 @@
         }
       }
     },
+    "/v1.1/lessons": {
+      "get": {
+        "operationId": "lessonsGet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/lessonsGet"
+            }
+          }
+        }
+      }
+    },
     "/v1.1/users": {
       "get": {
         "operationId": "usersGet",
@@ -185,6 +202,10 @@
     },
     "assignmentsGet##assignments": {
       "type": "object",
+      "required": [
+        "id",
+        "updated_at"
+      ],
       "properties": {
         "assignable_id": {
           "type": "integer"
@@ -250,6 +271,83 @@
         },
         "total_pages": {
           "type": "integer"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "lessonsGet##lessons##tags": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "resource_type": {
+          "type": "string"
+        }
+      }
+    },
+    "lessonsGet##lessons": {
+      "type": "object",
+      "properties": {
+        "archived_at": {
+          "type": "string"
+        },
+        "archived_by_user_id": {
+          "type": "integer"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "last_updated_at": {
+          "type": "string"
+        },
+        "links": {
+          "type": "object",
+          "properties": {
+            "overview": {
+              "type": "string"
+            },
+            "shareable": {
+              "type": "string"
+            }
+          }
+        },
+        "public": {
+          "type": "boolean"
+        },
+        "resource_type": {
+          "type": "string"
+        },
+        "retake_score": {
+          "type": "integer"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/lessonsGet##lessons##tags"
+          }
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "lessonsGet": {
+      "type": "object",
+      "properties": {
+        "lessons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/lessonsGet##lessons"
+          }
         },
         "type": {
           "type": "string"

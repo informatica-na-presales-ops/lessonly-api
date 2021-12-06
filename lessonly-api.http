@@ -5,5 +5,10 @@ Authorization: Basic {{ subdomain }} {{ api-key }}
 
 ###
 
+GET https://api.lessonly.com/api/v1.1/lessons?page=1
+Authorization: Basic {{ subdomain }} {{ api-key }}
+
+###
+
 GET https://api.lessonly.com/api/v1.1/users?page=1
 Authorization: Basic {{ subdomain }} {{ api-key }}
