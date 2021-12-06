@@ -10,6 +10,22 @@
   "host": "api.lessonly.com",
   "basePath": "/api",
   "paths": {
+    "/v1/groups": {
+      "get": {
+        "operationId": "groupsGet",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/groupsGet"
+            }
+          }
+        }
+      }
+    },
     "/v1.1/assignments": {
       "get": {
         "operationId": "assignmentsGet",
@@ -44,7 +60,6 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [],
         "responses": {
           "200": {
             "description": "Success",
@@ -197,6 +212,37 @@
           "items": {
             "$ref": "#/definitions/usersGet##users"
           }
+        }
+      }
+    },
+    "groupsGet##groups": {
+      "type": "object",
+      "properties": {
+        "archived_at": {
+          "type": "string"
+        },
+        "archived_by_user_id": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "groupsGet": {
+      "type": "object",
+      "properties": {
+        "groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/groupsGet##groups"
+          }
+        },
+        "type": {
+          "type": "string"
         }
       }
     },
