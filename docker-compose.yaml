@@ -1,0 +1,9 @@
+services:
+  shell:
+    entrypoint:
+      - /bin/sh
+    image: ghcr.io/informatica-na-presales-ops/lessonly-api
+    init: true
+    volumes:
+      - ./:/home/python/lessonly-api
+    working_dir: /home/python/lessonly-api
