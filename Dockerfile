@@ -9,6 +9,8 @@ RUN /usr/local/bin/python -m venv /home/python/venv
 COPY --chown=python:python requirements.txt /home/python/lessonly-api/requirements.txt
 RUN /home/python/venv/bin/pip install --no-cache-dir --requirement /home/python/lessonly-api/requirements.txt
 
+COPY --chown=python:python get-assignment-data.py /home/python/lessonly-api/get-assignment-data.py
+
 ENV PATH="/home/python/venv/bin:${PATH}" \
     PYTHONDONTWRITEBYTECODE="1" \
     PYTHONUNBUFFERED="1" \

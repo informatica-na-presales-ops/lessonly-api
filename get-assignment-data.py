@@ -91,7 +91,7 @@ def main_job():
     cnx = get_database()
 
     lc = lessonly.LessonlyClient(lessonly_api_username, lessonly_api_password)
-    lc.assignments_updated_at_filter = datetime.date(2022, 1, 31)
+    lc.assignments_updated_at_filter = datetime.date.today()
     log.info(f'Getting assignment data updated on or after {lc.assignments_updated_at_filter}')
     for assignment in lc.assignments:
         a_id = assignment.get('id')
