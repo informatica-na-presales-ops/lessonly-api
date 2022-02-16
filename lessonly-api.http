@@ -1,5 +1,10 @@
 ###
 
+GET https://api.lessonly.com/api/v1.1/assignments?gt[updated_at]=2022-01-31
+Authorization: Basic {{ subdomain }} {{ api-key }}
+
+###
+
 GET https://api.lessonly.com/api/v1/groups
 Authorization: Basic {{ subdomain }} {{ api-key }}
 
@@ -10,22 +15,47 @@ Authorization: Basic {{ subdomain }} {{ api-key }}
 
 ###
 
-GET https://api.lessonly.com/api/v1/users/{{ user-id }}/assignments
+GET https://api.lessonly.com/api/v1/lessons/{{ lesson-id }}
 Authorization: Basic {{ subdomain }} {{ api-key }}
 
 ###
 
-GET https://api.lessonly.com/api/v1.1/assignments?page=1
+GET https://api.lessonly.com/api/v1.1/lessons
 Authorization: Basic {{ subdomain }} {{ api-key }}
 
 ###
 
-GET https://api.lessonly.com/api/v1.1/lessons?page=1
+GET https://api.lessonly.com/api/v1.1/lessons/{{ lesson-id }}
+Authorization: Basic {{ subdomain }} {{ api-key }}
+
+###
+
+GET https://api.lessonly.com/api/v1/paths/{{ path-id }}/assignments
+Authorization: Basic {{ subdomain }} {{ api-key }}
+
+###
+
+GET https://api.lessonly.com/api/v1/paths
+Authorization: Basic {{ subdomain }} {{ api-key }}
+
+###
+
+GET https://api.lessonly.com/api/v1/paths/{{ path-id }}
 Authorization: Basic {{ subdomain }} {{ api-key }}
 
 ###
 
 GET https://api.lessonly.com/api/v1.1/paths
+Authorization: Basic {{ subdomain }} {{ api-key }}
+
+###
+
+GET https://api.lessonly.com/api/v1.1/paths/{{ path-id }}
+Authorization: Basic {{ subdomain }} {{ api-key }}
+
+###
+
+GET https://api.lessonly.com/api/v1/users/{{ user-id }}/assignments
 Authorization: Basic {{ subdomain }} {{ api-key }}
 
 ###
