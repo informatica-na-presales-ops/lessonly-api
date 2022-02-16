@@ -57,12 +57,12 @@ def upsert_assignment_contents(cnx, contents: list[dict]):
         psycopg2.extras.execute_batch(cur, sql, contents)
 
 
-def get_assignment_contents(cnx, assignment_id: int, parent: int, contents: list[dict]):
+def get_assignment_contents(assignment_id: int, parent: int, contents: list[dict]):
     for item in contents:
         item_id = item.get('id')
         log.debug(f'Working on assignment {assignment_id} content item {item_id}')
         if item.get('resource_type') == 'path':
-            yield from get_assignment_contents(cnx, assignment_id, item.get('id'), item.get('contents'))
+            yield from get_assignment_contents(assignment_id, item.get('id'), item.get('contents'))
         else:
             params = {
                 'assignment_id': assignment_id,
@@ -99,7 +99,7 @@ def main_job():
         upsert_assignment(cnx, assignment)
         if 'contents' in assignment:
             parent = assignment.get('assignable_id')
-            contents = list(get_assignment_contents(cnx, a_id, parent, assignment.get('contents')))
+            contents = list(get_assignment_contents(a_id, parent, assignment.get('contents')))
             upsert_assignment_contents(cnx, contents)
 
     cnx.commit()
