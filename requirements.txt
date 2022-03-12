@@ -14,7 +14,7 @@ charset-normalizer==2.0.12
     # via requests
 idna==3.3
     # via requests
-notch==0.0.1
+notch==2022.1
     # via -r requirements.in
 psycopg2==2.9.3
     # via -r requirements.in
