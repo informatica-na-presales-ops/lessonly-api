@@ -57,3 +57,21 @@ class LessonlyClient:
         response.raise_for_status()
         data = response.json()
         return data.get('paths')
+
+    @property
+    def users(self) -> list[dict]:
+        url = f'{self._base_url_v1_1}/users'
+        params = {
+            'page': 1
+        }
+        while True:
+            response = self.session.get(url, params=params)
+            response.raise_for_status()
+            data = response.json()
+            yield from data.get('users')
+            if params.get('page') < data.get('total_pages'):
+                params.update({
+                    'page': params.get('page') + 1
+                })
+            else:
+                break
