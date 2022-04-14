@@ -12,6 +12,7 @@ RUN /home/python/venv/bin/pip install --no-cache-dir --requirement /home/python/
 COPY --chown=python:python lessonly.py /home/python/lessonly-api/lessonly.py
 COPY --chown=python:python get-assignment-data.py /home/python/lessonly-api/get-assignment-data.py
 COPY --chown=python:python get-learning-content.py /home/python/lessonly-api/get-learning-content.py
+COPY --chown=python:python get-user-data.py /home/python/lessonly-api/get-user-data.py
 
 ENV PATH="/home/python/venv/bin:${PATH}" \
     PYTHONDONTWRITEBYTECODE="1" \
