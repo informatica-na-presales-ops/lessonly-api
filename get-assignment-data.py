@@ -1,5 +1,4 @@
 import apscheduler.schedulers.blocking
-import datetime
 import lessonly
 import notch
 import os
@@ -10,51 +9,45 @@ import sys
 log = notch.make_log('lessonly_api.get_assignment_data')
 
 
-def get_database():
-    dsn = os.getenv('DB')
-    cnx = psycopg2.connect(dsn, cursor_factory=psycopg2.extras.DictCursor)
-    return cnx
-
-
-def upsert_assignment(cnx, assignment: dict):
+def upsert_assignment(cnx, records: list[dict]):
+    log.info(f'Sending {len(records)} assignment records to postgres')
     sql = '''
         insert into lessonly_assignments_raw (
             assignable_id, assignable_type, assigned_at, assignee_id, completed_at, due_by,
             ext_uid, id, is_certification, reassigned_at, resource_type, score, started_at,
-            status, updated_at
+            status, updated_at, _synced
         ) values (
             %(assignable_id)s, %(assignable_type)s, %(assigned_at)s, %(assignee_id)s, %(completed_at)s, %(due_by)s,
             %(ext_uid)s, %(id)s, %(is_certification)s, %(reassigned_at)s, %(resource_type)s, %(score)s, %(started_at)s,
-            %(status)s, %(updated_at)s
+            %(status)s, %(updated_at)s, true
         ) on conflict (id) do update set
             assignable_id = %(assignable_id)s, assignable_type = %(assignable_type)s,
             assigned_at = %(assigned_at)s, assignee_id = %(assignee_id)s, completed_at = %(completed_at)s,
             due_by = %(due_by)s, ext_uid = %(ext_uid)s, is_certification = %(is_certification)s,
             reassigned_at = %(reassigned_at)s, resource_type = %(resource_type)s, score = %(score)s,
-            started_at = %(started_at)s, status = %(status)s, updated_at = %(updated_at)s
+            started_at = %(started_at)s, status = %(status)s, updated_at = %(updated_at)s, _synced = true
     '''
-    if 'is_certification' not in assignment:
-        assignment.update({
-            'is_certification': None
-        })
-    with cnx.cursor() as cur:
-        cur.execute(sql, assignment)
+    with cnx:
+        with cnx.cursor() as cur:
+            psycopg2.extras.execute_batch(cur, sql, records)
 
 
-def upsert_assignment_contents(cnx, contents: list[dict]):
+def upsert_assignment_contents(cnx, records: list[dict]):
+    log.info(f'Sending {len(records)} assignment content records to postgres')
     sql = '''
         insert into lessonly_assignment_contents_raw (
             assignment_id, completed_at, parent, resource_id, resource_type, score,
-            started_at, status
+            started_at, status, _synced
         ) values (
             %(assignment_id)s, %(completed_at)s, %(parent)s, %(resource_id)s, %(resource_type)s, %(score)s,
-            %(started_at)s, %(status)s
+            %(started_at)s, %(status)s, true
         ) on conflict (assignment_id, resource_id) do update set
             completed_at = %(completed_at)s, parent = %(parent)s, score = %(score)s, started_at = %(started_at)s,
-            status = %(status)s
+            status = %(status)s, _synced = true
     '''
-    with cnx.cursor() as cur:
-        psycopg2.extras.execute_batch(cur, sql, contents)
+    with cnx:
+        with cnx.cursor() as cur:
+            psycopg2.extras.execute_batch(cur, sql, records)
 
 
 def get_assignment_contents(assignment_id: int, parent: int, contents: list[dict]):
@@ -88,21 +81,58 @@ def main_job():
         log.error('You must set the LESSONLY_API_PASSWORD environment variable')
         return
 
-    cnx = get_database()
+    cnx = psycopg2.connect(os.getenv('DB'), cursor_factory=psycopg2.extras.DictCursor)
+
+    # turn off the _synced flag for all records
+    with cnx:
+        with cnx.cursor() as cur:
+            cur.execute('''
+                update lessonly_assignments_raw
+                set _synced = false where _synced is true or _synced is null
+            ''')
+            cur.execute('''
+                update lessonly_assignment_contents_raw
+                set _synced = false where _synced is true or _synced is null
+            ''')
 
     lc = lessonly.LessonlyClient(lessonly_api_username, lessonly_api_password)
-    lc.assignments_updated_at_filter = datetime.date.today()
-    log.info(f'Getting assignment data updated on or after {lc.assignments_updated_at_filter}')
+
+    assignment_records = []
+    content_records = []
+
     for assignment in lc.assignments:
         a_id = assignment.get('id')
         log.debug(f'Found an assignment: {a_id}')
-        upsert_assignment(cnx, assignment)
+        assignment.setdefault('is_certification', None)
+        assignment_records.append(assignment)
         if 'contents' in assignment:
             parent = assignment.get('assignable_id')
-            contents = list(get_assignment_contents(a_id, parent, assignment.get('contents')))
-            upsert_assignment_contents(cnx, contents)
+            content_records.extend(get_assignment_contents(a_id, parent, assignment.get('contents')))
 
-    cnx.commit()
+        # send records to postgres when we have collected enough
+        if len(assignment_records) > 999:
+            upsert_assignment(cnx, assignment_records)
+            assignment_records = []
+        if len(content_records) > 999:
+            upsert_assignment_contents(cnx, content_records)
+            content_records = []
+
+    # send leftover records
+    if assignment_records:
+        upsert_assignment(cnx, assignment_records)
+    if content_records:
+        upsert_assignment_contents(cnx, content_records)
+
+    # remove records that were not included in this sync
+    with cnx:
+        with cnx.cursor() as cur:
+            cur.execute('''
+                delete from lessonly_assignments_raw where _synced is false
+            ''')
+            cur.execute('''
+                delete from lessonly_assignment_contents_raw where _synced is false
+            ''')
+
     cnx.close()
 
 
