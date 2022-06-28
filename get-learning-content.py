@@ -27,8 +27,10 @@ def upsert_path_steps(cnx, path_steps: list[dict]):
             archived_at = %(archived_at)s, archived_by_user_id = %(archived_by_user_id)s, resource_id = %(resource_id)s,
             resource_type = %(resource_type)s
     '''
-    with cnx.cursor() as cur:
-        psycopg2.extras.execute_batch(cur, sql, path_steps)
+    if path_steps:
+        with cnx.cursor() as cur:
+            cur.execute('delete from lessonly_path_steps where base_path_id = %(base_path_id)s', path_steps[0])
+            psycopg2.extras.execute_batch(cur, sql, path_steps)
 
 
 def get_path_steps(base_path_id: int, path_id: int, contents: list[dict], reverse=False):
